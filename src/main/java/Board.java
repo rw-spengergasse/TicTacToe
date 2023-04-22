@@ -7,6 +7,8 @@ public class Board
     // 2 = player 2
     private int[][] board;
 
+    private int remainingMoves;
+
 
     // Initialize Board with size `n`
     public Board(int size)
@@ -14,20 +16,46 @@ public class Board
         // TODO ensure size
 
         board = new int[size][size];
+
+        remainingMoves = size * size;
     }
 
 
     // player makes move
-    public void makeMove(int row, int col, int player)
+    public int makeMove(int row, int col, int player)
     {
         // TODO ensure index in bound
 
         if (board[row][col] == 0)
+        {
             board[row][col] = player;
+
+            remainingMoves--;
+        }
+
+        return gameStatus();
+    }
+
+    public int gameStatus()
+    {
+        // -1 = DRAW
+        // 0 = CONTINUE
+        // 1/2 PLAYER WINS
+
+
+        int status = checkWin();
+
+        if (remainingMoves == 0)
+            status = -1;
+
+        return status;
+
+
     }
 
 
     // Checks for the entire board win status
+    // Returns 0 or player
     public int checkWin()
     {
         int winStatus;
@@ -96,5 +124,30 @@ public class Board
         }
 
         return board[board.length-1][0];
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < board.length; i++)
+        {
+            sb.append("| ");
+
+            for (int j = 0; j < board.length; j++)
+            {
+                sb.append(board[i][j]).append(" | ");
+            }
+
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    public void print()
+    {
+        System.out.println(toString());
     }
 }
